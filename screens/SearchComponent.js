@@ -6,7 +6,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons'
 export default function SearchComponent() {
     return (
         <View style={styles.searchContainer}>
-            <TextInput style={ styles.textInput} placeholder='Search on jumia' />
+            <TextInput style={ styles.textInput} placeholder='Search my store' />
             <Ionicon style={styles.cartIcon} name='cart-outline' size={30} color='white' />
             <Ionicon style={styles.searchIcon} name='search-outline' size={23} color='black' />
         </View>

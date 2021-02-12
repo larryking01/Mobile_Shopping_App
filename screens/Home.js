@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { projectFireStore } from '../firebase/firebaseSetup'
-import { View, StyleSheet, Text, FlatList, Image } from 'react-native'
+import { View, StyleSheet, Text, FlatList, Image, TouchableOpacity, Alert } from 'react-native'
 import SearchComponent from './SearchComponent'
-let phone = require('../static files/s6edge.jpg')
-
 
 
 export default function Home() {
 
+    // the array to hold the image links
     const [imageLinkArray, setImageLinkArray] = useState([])
-    let imageLink = 'https://images.samsung.com/is/image/samsung/ph-galaxy-s6-g920-sm-g920fzkuxtc-001-front-black'
 
-    // fetching all data from the firestore collection
+    // the state to hold the id of the selected product.
+    const [ selectedProductID, setSelectedProductID ] = useState()
+    
+
+    // fetching all data from the firestore collection and displaying them 
     useEffect(() => {
         projectFireStore.collection('Products').orderBy('productName').onSnapshot(snap => {
             let temporaryArray = []
@@ -25,6 +27,29 @@ export default function Home() {
 
 
 
+    //function to add items selected to the cart.
+    const addToCart = ( event ) => {
+        Alert.alert('Like it?', 'Then add it to your cart !!', 
+        [ 
+            {
+                text: 'Add',
+                onPress: () => {},
+                style:'default'
+            },
+            {
+                text: 'Later',
+                onPress: () => {},
+                style: 'default'
+            }
+        ]
+        )
+
+        console.log(event)
+
+    }
+
+
+
     return (
         <View style={styles.parentContainer}>
              <SearchComponent />
@@ -34,6 +59,7 @@ export default function Home() {
                 numColumns={3}
                 data={imageLinkArray}
                 renderItem={({ item, index }) => (
+                  <TouchableOpacity onPress={ addToCart }>
                   <View style={styles.productImageWrapper}> 
                     <Image style={styles.productImages}
                            source={{
@@ -41,8 +67,9 @@ export default function Home() {
                            }}
                            key={index}
                     />
-                    <Text> { item.productName } </Text>
+                    <Text style={styles.productNameText}> { item.productName } </Text>
                     </View>
+                    </TouchableOpacity>
                 )}
                 
              />
@@ -65,15 +92,20 @@ const styles = StyleSheet.create({
         top: 80
     },
     productImages: {
-        width: 100,
-        height: 150, 
+        width: 110,
+        height: 160, 
         position: 'relative', 
         top: 30
     },
     productImageWrapper: {
-        height: 170,
-        width: 120,
+        height: 200,
+        width: 115,
         marginLeft: 5,
-        elevation: 2
+        elevation: 4,
+        paddingBottom: 20
+    },
+    productNameText: {
+        position: 'relative',
+        top: 30
     }
 })
